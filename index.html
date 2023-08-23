@@ -16,11 +16,11 @@
         {{ msg.text }}
       </p>
     </div>
-    <input id="console-in" type="text" />
+    <input id="console-in" type="text" v-model="input" v-on:keydown.enter="processCommand(input)" />
   </div>
-  
-  <script src=“https://unpkg.com/petite-vue” defer></script>
-  <script src="js/script.js" defer></script>
+
+  <script src="https://unpkg.com/petite-vue"></script>
+  <script src="js/script.js"></script>
 </body>
 
 </html>
