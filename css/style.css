@@ -1,0 +1,35 @@
+#console {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  background-color: black;
+  padding: 2px;
+}
+
+#console-out {
+  flex-grow: 1;
+  overflow: auto;
+  background-color: blue;
+  color: white;
+  padding: 2px;
+}
+
+#console-out p {
+  margin: 0;
+}
+
+#console-in {
+  flex-grow: 0 0 auto;
+  background: darkblue;
+  color: lightgray;
+}
+
+.para-err {
+  color: red;
+}
+.para-res {
+  color: white;
+}
+.para-cmd {
+  color: lightgreen;
+}
