@@ -83,20 +83,20 @@ window.app = {
     if (!dir) {
       return [false, ['Ir para onde?']];
     }
-    
+
     if (!this.directions.includes(dir)) {
       return [false, [`${dir} não é uma direção.`]];
     }
-    
+
     let player = this.getObject('você');
     let exits = this.getExitsAt(player.loc);
-    
+
     let exit = exits.filter(v => v.tag === dir)[0];
-    
+
     if (!exit) {
       return [false, [`Não tem nada a ${dir} daqui.`]];
     }
-    
+
     player.loc = exit.leadsTo;
     return this.look();
   },
