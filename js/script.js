@@ -1,8 +1,12 @@
 window.app = {
   input: '',
   output: [],
+  directions: ['norte', 'sul', 'leste', 'oeste'],
   objects: [
     { tag: 'campo', desc: 'um campo', loc: '', weight: 9999 },
+    { tag: 'caverna', desc: 'uma caverna', loc: '', weight: 9999 },
+    { tag: 'leste', desc: 'uma entrada', loc: 'campo', weight: 9999, leadsTo: 'caverna' },
+    { tag: 'oeste', desc: 'uma saida', loc: 'caverna', weight: 9999, leadsTo: 'campo' },
     { tag: 'guarda', desc: 'um guarda', loc: 'campo', weight: 80 },
     { tag: 'adaga', desc: 'uma adaga', loc: 'guarda', weight: 2 },
     { tag: 'prata', desc: 'uma moeda de prata', loc: 'campo', weight: 1 },
@@ -27,6 +31,13 @@ window.app = {
         return this.look(args[0]);
       case 'pegar':
         return this.pickup(args[0]);
+      case 'ir':
+        return this.go(args[0]);
+      case 'norte':
+      case 'sul':
+      case 'leste':
+      case 'oeste':
+        return this.go(cmd);
       default:
         return [false, [`Eu não sei "${cmd}".`]]
     }
@@ -35,7 +46,7 @@ window.app = {
     let player = this.getObject('você');
 
     if (!where || where === 'arredores') {
-      return [true, [`Você está em ${ this.getObject(player.loc).desc }.`].concat(this.descObjectsAt(player.loc))];
+      return [true, [`Você está em ${ this.getObject(player.loc).desc }.`].concat(this.descObjectsAt(player.loc).concat(this.descExitsAt(player.loc)))];
     }
 
     if (where === 'eu') where = 'você';
@@ -68,17 +79,44 @@ window.app = {
     item.loc = player.tag;
     return [true, [`Você pegou "${item.desc}".`]];
   },
+  go(dir) {
+    if (!dir) {
+      return [false, ['Ir para onde?']];
+    }
+    
+    if (!this.directions.includes(dir)) {
+      return [false, [`${dir} não é uma direção.`]];
+    }
+    
+    let player = this.getObject('você');
+    let exits = this.getExitsAt(player.loc);
+    
+    let exit = exits.filter(v => v.tag === dir)[0];
+    
+    if (!exit) {
+      return [false, [`Não tem nada a ${dir} daqui.`]];
+    }
+    
+    player.loc = exit.leadsTo;
+    return this.look();
+  },
   logToConsole(msg, cls) {
     this.output.push({ text: msg, class: cls });
   },
   getObject(tag) {
-    return this.objects.filter(v => v.tag === tag)[0];
+    return this.objects.filter(v => v.tag === tag && !this.directions.includes(v.tag))[0];
   },
   getObjectsAt(loc) {
-    return this.objects.filter(v => v.loc === loc && v.tag !== 'você');
+    return this.objects.filter(v => v.loc === loc && v.tag !== 'você' && !this.directions.includes(v.tag));
   },
   descObjectsAt(loc) {
     return this.getObjectsAt(loc).map(v => `Tem ${v.desc} aqui.`);
+  },
+  getExitsAt(loc) {
+    return this.objects.filter(v => v.loc === loc).filter(v => v.leadsTo && this.directions.includes(v.tag));
+  },
+  descExitsAt(loc) {
+    return this.getExitsAt(loc).map(v => `Tem ${v.desc} para o ${v.tag} daqui.`);
   }
 };
 
