@@ -1,0 +1,48 @@
+{
+  "start": {
+    "text": "Oi, eu sou o guarda desde campo. Você está procurando algo?",
+    "options": [
+      {
+        "text": "Sim, eu estou procurando a saída.",
+        "next": "exit"
+      },
+      {
+        "text": "Não, eu só estou passeando.",
+        "next": "walk"
+      },
+      {
+        "text": "Você parece cansado. Quer uma moeda de prata?",
+        "next": "coin",
+        "condition": "player.hasItem('silver_coin')"
+      }
+    ]
+  },
+  "exit": {
+    "text": "A saída? Você está perdido? Bem, você pode ir para qualquer direção neste campo. Mas cuidado com a floresta, ela é perigosa.",
+    "options": [
+      {
+        "text": "Obrigado pela dica.",
+        "next": null
+      }
+    ]
+  },
+  "walk": {
+    "text": "Ah, eu entendo. É bom dar uma caminhada de vez em quando. Mas não se afaste muito, esse lugar é cheio de surpresas.",
+    "options": [
+      {
+        "text": "Tudo bem, eu vou tomar cuidado.",
+        "next": null
+      }
+    ]
+  },
+  "coin": {
+    "text": "Uma moeda de prata? Para mim? Você é muito generoso. Obrigado, isso vai me ajudar muito.",
+    "options": [
+      {
+        "text": "De nada, fico feliz em ajudar.",
+        "next": null,
+        "action": "this.doDrop('silver_coin')"
+      }
+    ]
+  }
+}

@@ -1,186 +1,154 @@
-class Room {
-  constructor(desc) {
-    this.desc = desc;
-    this.exits = {};
-    this.objects = [];
-  }
+import { createApp, reactive } from 'https://unpkg.com/petite-vue?module'
+import player from './player.js'
+import { playerProto } from './player.js'
 
-  addExit(key, loc) {
-    this.exits[key] = loc;
-  }
+function Game({ initialRoom, roomsPath, objsPath }) {
+  return {
+    state: 'load',
+    states: ['game', 'inv', 'dialog'],
+    mode: 'olhar',
+    modes: {
+      game: ['olhar', 'pegar', 'falar'],
+      inv: ['olhar', 'largar']
+    },
+    player,
+    room: null,
+    roomDesc: '',
+    roomImg: '',
+    rooms: null,
+    initialRoom: initialRoom,
+    objects: null,
+    message: null,
+    dialogs: {},
+    dialog: null,
+    dialogState: null,
+    dialogData: {},
+    action: {},
+    mounted() {
+      if (this.rooms == null || this.objects == null) {
+        Promise.all([fetch(roomsPath)
+        .then(res => res.json()), fetch(objsPath).then(res => res.json()), fetch('data/dialogs/save.json').then(res => res.json())])
+          .then(res => {
+            this.rooms = res[0];
+            this.objects = res[1];
+            this.dialogs['save'] = res[2];
+            this.room = this.rooms[this.initialRoom];
+            this.roomDesc = this.room.description;
+            this.roomImg = this.room.image || '';
 
-  addObject(obj) {
-    this.objects.push(obj);
-  }
+            this.setupActions();
+            this.state = 'game';
+          });
+      } else if (this.state == 'load') {
+        this.setupActions();
+        this.state = 'game';
+      }
+    },
+    setupActions() {
+      this.action.olhar = this.doLook;
+      this.action.pegar = this.doPick;
+      this.action.largar = this.doDrop;
+      this.action.falar = this.doTalk;
+    },
+    doMovement(dir) {
+      let exit = this.room.exits.find(t => t.dir === dir);
+      this.room = this.rooms[exit.room];
+      this.roomDesc = this.room.description;
+      this.roomImg = this.room.image || '';
+      this.message = null;
+      if (exit.room == 'lago') this.player.fullHeal();
+    },
+    doLook(what) {
+      this.message = this.objects[what].desc;
+    },
+    doPick(what) {
+      if (!this.room.objects.includes(what)) {
+        this.message = `Não há ${this.objects[what].pronoun} ${this.objects[what].name} na sala.`;
+        return;
+      }
+      
+      let obj = this.objects[what];
 
-  removeObject(obj) {
-    this.objects.splice(this.objects.indexOf(obj), 1);
-  }
+      if (!obj?.canPick) {
+        this.message = `Você não pode pegar ${obj?.pronoun + ' ' ?? ''}${ obj?.name ?? 'isso'}.`;
+        return;
+      }
 
-  getObject(tag) {
-    return this.objects.filter((v) => v.tag === tag)[0];
-  }
+      if (this.player.pick(what)) {
+        this.room.objects.splice(this.room.objects.indexOf(what), 1);
+        this.message = `Você pegou ${obj.pronoun} ${obj.name}.`;
+      } else {
+        this.message = `Seu inventário está cheio!`;
+      }
+    },
+    doDrop(what) {
+      let obj = this.objects[what];
+
+      if (this.player.drop(what)) {
+        if (!this.room.objects) this.room.objects = [];
+        this.room.objects.push(what);
+        this.message = `${obj.name} largado(a).`;
+      } else {
+        this.message = `Você não pode largar ${obj.name}`;
+      }
+    },
+    doTalk(who) {
+      let obj = this.objects[who];
+
+      let dialogUrl = obj.dialogUrl;
+
+      if (!dialogUrl) {
+        this.message = `${obj.name} não quer falar com você.`;
+        return;
+      }
+
+      if (!this.dialogs[who]) {
+        fetch(dialogUrl)
+          .then(res => res.json())
+          .then(res => {
+            this.dialogs[who] = res;
+            this.startDialog(who);
+          });
+      } else {
+        this.startDialog(who);
+      }
+    },
+    startDialog(who) {
+      this.dialog = this.dialogs[who];
+      this.dialogState = this.dialog.start;
+      this.dialogData = {};
+      this.message = this.dialogState.text;
+      this.state = 'dialog';
+    },
+    doChoose(option) {
+      let next = option.next;
+
+      if (next) {
+        this.dialogState = this.dialog[next];
+        this.message = this.dialogState.text;
+      } else {
+        this.dialog = null;
+        this.dialogState = null;
+        this.message = null;
+        this.state = 'game';
+      }
+
+      let action = option.action;
+
+      if (action) {
+        eval(action);
+      }
+    },
+    doSave(file) {
+      localStorage.setItem(file, JSON.stringify(this));
+    },
+    doLoad(file) {
+      let obj = JSON.parse(localStorage.getItem(file));
+      obj.player = reactive({ ...obj.player, ...playerProto });
+      Object.assign(this, obj);
+      this.setupActions();
+    }
+  };
 }
 
-class MyObject {
-  constructor(tag, desc, loc, weight) {
-    this.tag = tag;
-    this.desc = desc;
-    this.loc = loc;
-    this.weight = weight;
-  }
-
-  setLocation(newLoc) {
-    this.loc = newLoc;
-    this.loc.addObject(this);
-  }
-
-  move(newLoc) {
-    this.loc.removeObject(this);
-    this.setLocation(newLoc);
-  }
-}
-
-class Entity extends MyObject {
-  constructor(name, health, loc) {
-    super(name, name, loc, 80);
-
-    this.name = name;
-    this.health = health;
-    this.inventory = [];
-    this.actions = {};
-  }
-
-  addItem(item) {
-    this.inventory.push(item);
-  }
-
-  removeItem(item) {
-    this.inventory.splice(this.inventory.indexOf(item), 1);
-  }
-
-  addAction(key, func) {
-    this.actions[key] = func;
-  }
-
-  doAction(key, ...args) {
-    if (this.actions[key]) {
-      return this.actions[key](args);
-    } else {
-      return [false, [`${this.name} não pode ${key}.`]];
-    }
-  }
-}
-
-let rooms = [new Room("limbo"), new Room("um campo"), new Room("uma caverna")];
-
-let items = [
-  new MyObject("prata", "uma moeda de prata", rooms[1], 1),
-  new MyObject("adaga", "uma adaga", rooms[0], 2),
-];
-
-let entities = [
-  new Entity("guarda", 12, rooms[1]),
-  new Entity("você", 12, rooms[1]),
-];
-
-rooms[1].addExit("leste", rooms[2]);
-rooms[2].addExit("oeste", rooms[1]);
-
-entities[0].addItem(items[1]);
-
-items.forEach((item) => item.setLocation(item.loc));
-
-entities.forEach((e) => e.setLocation(e.loc));
-
-window.app = {
-  input: "",
-  output: [],
-  player: entities[1],
-  processCommand(line) {
-    this.logToConsole(">" + line, "para-cmd");
-
-    let toks = line.toLowerCase().trim().split(" ");
-    let cmd = toks[0];
-    let args = toks.slice(1, toks.length);
-
-    let [code, result] = this.gameEval(cmd, args);
-
-    result.map((n) => this.logToConsole(n, code ? "para-res" : "para-err"));
-
-    this.input = "";
-  },
-  gameEval(cmd, args) {
-    switch (cmd) {
-      case "olhar":
-        return this.look();
-      case "pegar":
-        return this.pickup(args[0]);
-      case "ir":
-        return this.go(args[0]);
-      case "norte":
-      case "sul":
-      case "leste":
-      case "oeste":
-        return this.go(cmd);
-      default:
-        return [false, [`Eu não sei "${cmd}".`]];
-    }
-  },
-  look() {
-    let loc = this.player.loc;
-    return [
-      true,
-      [`Você está em ${loc.desc}.`].concat(
-        loc.objects
-          .map((t) => `Tem ${t.desc} aqui.`)
-          .concat(
-            Object.keys(loc.exits).map(
-              (k) => `Tem ${loc.exits[k]} para o ${k} daqui.`
-            )
-          )
-      ),
-    ];
-  },
-  pickup(itemTag) {
-    if (!itemTag) {
-      return [false, [`Pegar o quê?`]];
-    }
-
-    let item = this.player.loc.getObject(itemTag);
-
-    if (!item) {
-      return [false, [`Não há ${itemTag} aqui.`]];
-    }
-
-    if (item.weight > 30) {
-      return [
-        false,
-        [`${item.desc} é muito pesado para ${player.desc} carregar.`],
-      ];
-    }
-
-    item.move(rooms[0]);
-    this.player.addItem(item);
-    return [true, [`Você pegou "${item.desc}".`]];
-  },
-  go(dir) {
-    if (!dir) {
-      return [false, ["Ir para onde?"]];
-    }
-
-    let exit = this.player.loc.exits[dir];
-
-    if (!exit) {
-      return [false, [`Não tem nada a ${dir} daqui.`]];
-    }
-
-    this.player.move(exit);
-    return this.look();
-  },
-  logToConsole(msg, cls) {
-    this.output.push({ text: msg, class: cls });
-  },
-};
-
-PetiteVue.createApp(app).mount();
+createApp({ Game }).mount();

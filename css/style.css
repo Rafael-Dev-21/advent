@@ -1,35 +1,97 @@
-#console {
-  display: flex;
-  flex-direction: column;
-  height: 400px;
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+
+body {
+  font: 1.3rem Inconsolata, monospace;
   background-color: black;
-  padding: 2px;
+  background-image: radial-gradient(rgba(0, 150, 0, 0.75),
+      black 120%);
+  pointer-events: none;
 }
 
-#console-out {
-  flex-grow: 1;
-  overflow: auto;
-  background-color: blue;
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(0deg,
+      rgba(black, 0.15),
+      rgba(black, 0.15) 1px,
+      transparent 1px,
+      transparent 2px);
+}
+
+h1 {
+  color: hsl(300, 50%, 50%);
+}
+
+main {
+  width: 80vw;
+  height: 80vh;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  body {
+    background-image: radial-gradient(hsl(0, 50%, 50%),
+        black 120%);
+  }
+}
+
+#page {
+  color: hsl(180, 50%, 50%);
+  border: 2px solid white;
+  margin: 10px;
+  padding: 10px;
+}
+
+#page #roomImg {
+  width: 90%;
+  height: auto;
+  image-rendering: pixelated;
+  transition-property: all;
+  transition-delay: 16ms;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.clickable.exit {
+  color: hsl(300, 60%, 60%);
+}
+
+.clickable.olhar {
+  color: green;
+}
+
+.clickable.pegar, .clickable.largar {
+  color: darkmagenta;
+}
+
+.clickable.falar {
+  color: blue;
+}
+
+.clickable.option {
+  color: orange;
+}
+
+button.clickable.selected {
+  background: transparent;
+  color: green;
+}
+
+button.clickable.unselected {
+  background: green;
   color: white;
-  padding: 2px;
 }
 
-#console-out p {
-  margin: 0;
-}
-
-#console-in {
-  flex-grow: 0 0 auto;
-  background: darkblue;
-  color: lightgray;
-}
-
-.para-err {
-  color: red;
-}
-.para-res {
-  color: white;
-}
-.para-cmd {
-  color: lightgreen;
+.inventory img {
+  width: 3rem;
+  height: 3rem;
 }

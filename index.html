@@ -1,27 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Advent</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
 
-  <body>
-    <h1># Advent</h1>
-    <div id="console" v-scope>
-      <div id="console-out">
-        <p v-for="msg in output" v-bind:class="msg.class">{{ msg.text }}</p>
-      </div>
-      <input
-        id="console-in"
-        type="text"
-        v-model="input"
-        v-on:keydown.enter="processCommand(input)"
-      />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adventure</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <main v-scope="Game({ initialRoom: 'campo', roomsPath: 'data/rooms.json', objsPath: 'data/objects.json' })" v-cloak @vue:mounted="mounted">
+    <h1># Adventure</h1>
+    <div v-if="state != 'load'">
+      <button v-for="s in states" :class="['clickable', state == s ? 'selected' : 'unselected']" @click="state = s">{{s}}</button>
     </div>
+    <div v-if="state == 'load'">
+      Carregando...
+    </div>
+    <div v-if="state == 'game'" id="page">
+      <h2>Sala</h2>
+      <figure>
+        <img id="roomImg" width="160" height="144" :src="roomImg">
+        <figcaption>
+          <p>{{ roomDesc }}</p>
+        </figcaption>
+      </figure>
+      <p v-if="message">{{ message }}</p>
+      <p v-if="room.objects">
+        <span v-for="obj in room.objects">Tem <span :class="['clickable', mode]" @click="action[mode](obj)"> {{objects[obj].pronoun}} {{objects[obj].name}}</span> aqui. </span>
+      </p>
+      <p v-if="room.exits">
+        Saidas:<span class="clickable exit" v-for="exit in room.exits" @click="doMovement(exit.dir)"> {{ exit.dir }}</span>.
+      </p>
+      <p>
+        Saúde: {{ player.health }}/{{ player.maxHealth }}
+      </p>
+      <p>
+        <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span> <span class="clickable option" @click="startDialog('save')">Salvar/Carregar</span>
+      </p>
+    </div>
+    <div v-if="state === 'inv'" id="page">
+      <h2>Inventário</h2>
+      <p v-if="message">{{ message }}</p>
+      <table class="inventory" border="1">
+        <tr v-for="row in player.grid()">
+          <td v-for="item in row">
+            <img class="clickable" :src="item && objects[item].icon || 'images/vazio.png'" :alt="item && objects[item].name || 'slot vazio'" @click="item && action[mode](item)" width="16" height="16">
+          </td>
+        </tr>
+      </table>
+      <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span>
+    </div>
+    <div v-if="state == 'dialog'" id="page">
+      <h2>Diálogo</h2>
+      <p v-if="message">{{ message }}</p>
+      <div v-if="dialogState && dialogState.options">
+        <h3>Opções</h3>
+        <div v-for="option in dialogState?.options ?? []"><p class="clickable option" v-if="!option.condition || eval(option.condition)" @click="doChoose(option)">{{option.text}}</p></div>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="js/script.js"></script>
+</body>
 
-    <script src="https://unpkg.com/petite-vue"></script>
-    <script src="js/script.js"></script>
-  </body>
 </html>

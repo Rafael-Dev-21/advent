@@ -1,0 +1,15 @@
+{
+  "silver_coin": {
+    "name": "moeda de prata",
+    "pronoun": "uma",
+    "desc": "A moeda tem uma águia estampada.",
+    "icon": "images/moeda-prata.png",
+    "canPick": true
+  },
+  "guard": {
+    "name": "guarda",
+    "pronoun": "um",
+    "desc": "O guarda tem olheiras e um semblante cansado.",
+    "dialogUrl": "data/dialogs/guarda.json"
+  }
+}

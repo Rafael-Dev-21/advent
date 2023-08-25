@@ -1,0 +1,51 @@
+{
+  "start": {
+    "text": "Salvar ou Carregar?",
+    "options": [
+      {
+        "text": "Salvar",
+        "next": "file",
+        "action": "this.dialogData.do = this.doSave;"
+      },
+      {
+        "text": "Carregar",
+        "next": "file",
+        "action": "this.dialogData.do = this.doLoad;"
+      }
+    ]
+  },
+  "file": {
+    "text": "Qual save?",
+    "options": [
+      {
+        "text": "Save 1",
+        "next": "confirm",
+        "action": "this.dialogData.file = 'advent1.save';"
+      },
+      {
+        "text": "Save 2",
+        "next": "confirm",
+        "action": "this.dialogData.file = 'advent2.save';"
+      },
+      {
+        "text": "Save 3",
+        "next": "confirm",
+        "action": "this.dialogData.file = 'advent3.save';"
+      }
+    ]
+  },
+  "confirm": {
+    "text": "Tem certeza?",
+    "options": [
+      {
+        "text": "Sim",
+        "next": null,
+        "action": "this.dialogData.do(this.dialogData.file);"
+      },
+      {
+        "text": "Não",
+        "next": null
+      }
+    ]
+  }
+}
