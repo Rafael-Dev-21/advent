@@ -21,8 +21,14 @@
       }
     ],
     "objects": [
-      "guard",
-      "silver_coin"
+      {
+        "id": "guard",
+        "quantity": 1
+      },
+      {
+        "id": "silver_coin",
+        "quantity": 10
+      }
     ]
   },
   "caverna": {
@@ -55,11 +61,22 @@
         "dir": "sul",
         "room": "floresta"
       }
+    ],
+    "objects": [
+      {
+        "id": "wood",
+        "quantity": 1000
+      }
     ]
   },
   "lago": {
     "description": "Você está em um lago secreto no meio da floresta. Você se sente revigorado.",
     "image": "images/lago.png",
+    "action": {
+      "caller": "player",
+      "method": "fullHeal",
+      "args": []
+    },
     "exits": [
       {
         "dir": "leste",

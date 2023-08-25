@@ -91,7 +91,27 @@ button.clickable.unselected {
   color: white;
 }
 
+.inventory {
+  width: 90%;
+  height: auto;
+}
+
+inventory td {
+  position: absolute;
+}
+
 .inventory img {
   width: 3rem;
   height: 3rem;
+  z-index: 2;
+  image-rendering: pixelated;
+}
+
+.inventory .count {
+  color: green;
+  position: relative;
+  font-size: 1rem;
+  text-shadow: 2 2 0 black;
+  left: 0;
+  bottom: 0;
 }

@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta lang="pt-BR" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Adventure</title>
   <link rel="stylesheet" href="css/style.css" />
@@ -27,7 +28,7 @@
       </figure>
       <p v-if="message">{{ message }}</p>
       <p v-if="room.objects">
-        <span v-for="obj in room.objects">Tem <span :class="['clickable', mode]" @click="action[mode](obj)"> {{objects[obj].pronoun}} {{objects[obj].name}}</span> aqui. </span>
+        <span v-for="obj in room.objects">Tem <span :class="['clickable', mode]" @click="doCommand(obj.id)"> {{objects[obj.id].name}} x{{obj.quantity}}</span> aqui. </span>
       </p>
       <p v-if="room.exits">
         Saidas:<span class="clickable exit" v-for="exit in room.exits" @click="doMovement(exit.dir)"> {{ exit.dir }}</span>.
@@ -36,7 +37,7 @@
         Saúde: {{ player.health }}/{{ player.maxHealth }}
       </p>
       <p>
-        <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span> <span class="clickable option" @click="startDialog('save')">Salvar/Carregar</span>
+        <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span> <span class="clickable option" @click="dialog.start('save'); state = 'dialog'">Salvar/Carregar</span>
       </p>
     </div>
     <div v-if="state === 'inv'" id="page">
@@ -45,7 +46,7 @@
       <table class="inventory" border="1">
         <tr v-for="row in player.grid()">
           <td v-for="item in row">
-            <img class="clickable" :src="item && objects[item].icon || 'images/vazio.png'" :alt="item && objects[item].name || 'slot vazio'" @click="item && action[mode](item)" width="16" height="16">
+            <img class="clickable icon" :src="item && objects[item.id].icon || 'images/vazio.png'" :alt="item && objects[item.id].name || 'slot vazio'" @click="item && doCommand(item.id)" width="16" height="16"><span  class="count" v-if="item">{{item.quantity}}</span>
           </td>
         </tr>
       </table>
@@ -53,10 +54,10 @@
     </div>
     <div v-if="state == 'dialog'" id="page">
       <h2>Diálogo</h2>
-      <p v-if="message">{{ message }}</p>
-      <div v-if="dialogState && dialogState.options">
+      <p v-if="dialog.state">{{ dialog.state.text }}</p>
+      <div v-if="dialog.options()">
         <h3>Opções</h3>
-        <div v-for="option in dialogState?.options ?? []"><p class="clickable option" v-if="!option.condition || eval(option.condition)" @click="doChoose(option)">{{option.text}}</p></div>
+        <p class="clickable option" v-for="option in dialog.options().filter(t => !t.condition || checkCondition(t.condition))" @click="doChoose(option)">{{option.text}}</p>
       </div>
     </div>
   </main>

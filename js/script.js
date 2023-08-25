@@ -1,6 +1,7 @@
-import { createApp, reactive } from 'https://unpkg.com/petite-vue?module'
-import player from './player.js'
-import { playerProto } from './player.js'
+import { createApp, reactive } from 'https://unpkg.com/petite-vue?module';
+import player from './player.js';
+import dialog from './dialog.js';
+import { doAction, checkCondition } from './jsonfunc.js';
 
 function Game({ initialRoom, roomsPath, objsPath }) {
   return {
@@ -12,6 +13,7 @@ function Game({ initialRoom, roomsPath, objsPath }) {
       inv: ['olhar', 'largar']
     },
     player,
+    dialog,
     room: null,
     roomDesc: '',
     roomImg: '',
@@ -19,36 +21,36 @@ function Game({ initialRoom, roomsPath, objsPath }) {
     initialRoom: initialRoom,
     objects: null,
     message: null,
-    dialogs: {},
-    dialog: null,
-    dialogState: null,
-    dialogData: {},
-    action: {},
     mounted() {
-      if (this.rooms == null || this.objects == null) {
-        Promise.all([fetch(roomsPath)
-        .then(res => res.json()), fetch(objsPath).then(res => res.json()), fetch('data/dialogs/save.json').then(res => res.json())])
-          .then(res => {
-            this.rooms = res[0];
-            this.objects = res[1];
-            this.dialogs['save'] = res[2];
-            this.room = this.rooms[this.initialRoom];
-            this.roomDesc = this.room.description;
-            this.roomImg = this.room.image || '';
+      Promise.all([fetch(roomsPath)
+        .then(res => res.json()), fetch(objsPath).then(res => res.json())])
+        .then(res => {
+          this.rooms = res[0];
+          this.objects = res[1];
+          this.dialog.load('save', 'data/dialogs/save.json', false);
+          this.room = this.rooms[this.initialRoom];
+          this.roomDesc = this.room.description;
+          this.roomImg = this.room.image || '';
 
-            this.setupActions();
-            this.state = 'game';
-          });
-      } else if (this.state == 'load') {
-        this.setupActions();
-        this.state = 'game';
-      }
+          this.state = 'game';
+        });
+
     },
-    setupActions() {
-      this.action.olhar = this.doLook;
-      this.action.pegar = this.doPick;
-      this.action.largar = this.doDrop;
-      this.action.falar = this.doTalk;
+    doCommand(arg) {
+      switch (this.mode) {
+        case 'olhar':
+          this.doLook(arg);
+          break;
+        case 'pegar':
+          this.doPick(arg);
+          break;
+        case 'largar':
+          this.doDrop(arg);
+          break;
+        case 'falar':
+          this.doTalk(arg);
+          break;
+      }
     },
     doMovement(dir) {
       let exit = this.room.exits.find(t => t.dir === dir);
@@ -56,17 +58,17 @@ function Game({ initialRoom, roomsPath, objsPath }) {
       this.roomDesc = this.room.description;
       this.roomImg = this.room.image || '';
       this.message = null;
-      if (exit.room == 'lago') this.player.fullHeal();
+      if (this.room.action) doAction(this, this.room.action);
     },
     doLook(what) {
       this.message = this.objects[what].desc;
     },
     doPick(what) {
-      if (!this.room.objects.includes(what)) {
+      if (!this.room.objects.find(x => x?.id == what)) {
         this.message = `Não há ${this.objects[what].pronoun} ${this.objects[what].name} na sala.`;
         return;
       }
-      
+
       let obj = this.objects[what];
 
       if (!obj?.canPick) {
@@ -75,7 +77,11 @@ function Game({ initialRoom, roomsPath, objsPath }) {
       }
 
       if (this.player.pick(what)) {
-        this.room.objects.splice(this.room.objects.indexOf(what), 1);
+        let i = this.room.objects.findIndex(x => x?.id == what);
+        this.room.objects[i].quantity--;
+        if (this.room.objects[i].quantity == 0) {
+          this.room.objects.splice(i, 1);
+        }
         this.message = `Você pegou ${obj.pronoun} ${obj.name}.`;
       } else {
         this.message = `Seu inventário está cheio!`;
@@ -85,8 +91,12 @@ function Game({ initialRoom, roomsPath, objsPath }) {
       let obj = this.objects[what];
 
       if (this.player.drop(what)) {
-        if (!this.room.objects) this.room.objects = [];
-        this.room.objects.push(what);
+        let i = this.room.objects.findIndex(x => x?.id == what);
+        if (i != -1) {
+          this.room.objects[i].quantity++;
+        } else {
+          this.room.objects.push({ id: what, quantity: 1 });
+        }
         this.message = `${obj.name} largado(a).`;
       } else {
         this.message = `Você não pode largar ${obj.name}`;
@@ -102,41 +112,17 @@ function Game({ initialRoom, roomsPath, objsPath }) {
         return;
       }
 
-      if (!this.dialogs[who]) {
-        fetch(dialogUrl)
-          .then(res => res.json())
-          .then(res => {
-            this.dialogs[who] = res;
-            this.startDialog(who);
-          });
+      if (!this.dialog.hasDialog(who)) {
+        this.dialog.load(who, dialogUrl, true);
       } else {
-        this.startDialog(who);
+        this.dialog.start(who);
       }
-    },
-    startDialog(who) {
-      this.dialog = this.dialogs[who];
-      this.dialogState = this.dialog.start;
-      this.dialogData = {};
-      this.message = this.dialogState.text;
       this.state = 'dialog';
     },
     doChoose(option) {
-      let next = option.next;
-
-      if (next) {
-        this.dialogState = this.dialog[next];
-        this.message = this.dialogState.text;
-      } else {
-        this.dialog = null;
-        this.dialogState = null;
-        this.message = null;
+      if (!this.dialog.option(this, option)) {
+        this.dialog.end();
         this.state = 'game';
-      }
-
-      let action = option.action;
-
-      if (action) {
-        eval(action);
       }
     },
     doSave(file) {
@@ -144,10 +130,13 @@ function Game({ initialRoom, roomsPath, objsPath }) {
     },
     doLoad(file) {
       let obj = JSON.parse(localStorage.getItem(file));
-      obj.player = reactive({ ...obj.player, ...playerProto });
+      obj.player = reactive({ ...player, ...obj.player });
+      obj.dialog = reactive({ ...dialog, ...obj.dialog });
       Object.assign(this, obj);
-      this.setupActions();
-    }
+    },
+    checkCondition(c) {
+      return checkCondition(this, c)
+    },
   };
 }
 

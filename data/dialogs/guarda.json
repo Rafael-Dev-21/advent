@@ -13,7 +13,13 @@
       {
         "text": "Você parece cansado. Quer uma moeda de prata?",
         "next": "coin",
-        "condition": "player.hasItem('silver_coin')"
+        "condition": {
+          "call": {
+            "caller": "player",
+            "method": "hasItem",
+            "args": ["silver_coin", 1]
+          }
+        }
       }
     ]
   },
@@ -41,7 +47,11 @@
       {
         "text": "De nada, fico feliz em ajudar.",
         "next": null,
-        "action": "this.doDrop('silver_coin')"
+        "action": {
+          "caller": "this",
+          "method": "doDrop",
+          "args": ["silver_coin"]
+        }
       }
     ]
   }

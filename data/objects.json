@@ -11,5 +11,12 @@
     "pronoun": "um",
     "desc": "O guarda tem olheiras e um semblante cansado.",
     "dialogUrl": "data/dialogs/guarda.json"
+  },
+  "wood": {
+    "name": "madeira",
+    "pronoun": "uma",
+    "desc": "Madeira seca e torta, melhor do que nada.",
+    "icon": "images/madeira.png",
+    "canPick": true
   }
 }
