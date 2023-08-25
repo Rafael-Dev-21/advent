@@ -6,11 +6,11 @@
   <meta lang="pt-BR" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Adventure</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="./css/style.css" />
 </head>
 
 <body>
-  <main v-scope="Game({ initialRoom: 'campo', roomsPath: 'data/rooms.json', objsPath: 'data/objects.json' })" v-cloak @vue:mounted="mounted">
+  <main v-scope="Game({ initialRoom: 'campo', roomsPath: './data/rooms.json', objsPath: './data/objects.json' })" v-cloak @vue:mounted="mounted">
     <h1># Adventure</h1>
     <div v-if="state != 'load'">
       <button v-for="s in states" :class="['clickable', state == s ? 'selected' : 'unselected']" @click="state = s">{{s}}</button>
@@ -61,7 +61,7 @@
       </div>
     </div>
   </main>
-  <script type="module" src="js/script.js"></script>
+  <script type="module" src="./js/script.js"></script>
 </body>
 
 </html>

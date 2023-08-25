@@ -27,7 +27,7 @@ function Game({ initialRoom, roomsPath, objsPath }) {
         .then(res => {
           this.rooms = res[0];
           this.objects = res[1];
-          this.dialog.load('save', 'data/dialogs/save.json', false);
+          this.dialog.load('save', './data/dialogs/save.json', false);
           this.room = this.rooms[this.initialRoom];
           this.roomDesc = this.room.description;
           this.roomImg = this.room.image || '';

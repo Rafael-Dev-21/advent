@@ -1,7 +1,7 @@
 {
   "campo": {
     "description": "Você está em um campo. Tem muita grama aqui.",
-    "image": "images/campo.png",
+    "image": "./images/campo.png",
     "exits": [
       {
         "dir": "oeste",
@@ -33,7 +33,7 @@
   },
   "caverna": {
     "description": "Você está em uma caverna. É meio escuro e úmido aqui.",
-    "image": "images/caverna.png",
+    "image": "./images/caverna.png",
     "exits": [
       {
         "dir": "oeste",
@@ -43,7 +43,7 @@
   },
   "floresta": {
     "description": "Você está em uma floresta. Tem muitas árvores aqui. Todos os caminhos parecem iguais.",
-    "image": "images/floresta.png",
+    "image": "./images/floresta.png",
     "exits": [
       {
         "dir": "oeste",
@@ -71,7 +71,7 @@
   },
   "lago": {
     "description": "Você está em um lago secreto no meio da floresta. Você se sente revigorado.",
-    "image": "images/lago.png",
+    "image": "./images/lago.png",
     "action": {
       "caller": "player",
       "method": "fullHeal",
