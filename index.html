@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <main v-scope="Game({ initialRoom: 'campo', roomsPath: './data/rooms.json', objsPath: './data/objects.json' })" v-cloak @vue:mounted="mounted">
+  <main id="app" v-cloak>
     <h1># Adventure</h1>
     <div v-if="state != 'load'">
       <button v-for="s in states" :class="['clickable', state == s ? 'selected' : 'unselected']" @click="state = s">{{s}}</button>
@@ -28,16 +28,18 @@
       </figure>
       <p v-if="message">{{ message }}</p>
       <p v-if="room.objects">
-        <span v-for="obj in room.objects">Tem <span :class="['clickable', mode]" @click="doCommand(obj.id)"> {{objects[obj.id].name}} x{{obj.quantity}}</span> aqui. </span>
+        <span v-for="obj in room.objects">Tem <span :class="['clickable', mode]" @click="doCommand(obj.id)">  {{objects[obj.id].name}} x{{obj.quantity}}</span> aqui. </span>
       </p>
       <p v-if="room.exits">
-        Saidas:<span class="clickable exit" v-for="exit in room.exits" @click="doMovement(exit.dir)"> {{ exit.dir }}</span>.
+        <span v-for="exit in room.exits">
+          Saída <span class="clickable exit" @click="doMovement(exit.dir)">{{ exit.dir }}</span>.
+        </span>
       </p>
       <p>
         Saúde: {{ player.health }}/{{ player.maxHealth }}
       </p>
       <p>
-        <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span> <span class="clickable option" @click="dialog.start('save'); state = 'dialog'">Salvar/Carregar</span>
+        <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">* {{m}}</span> <span class="clickable option" @click="dialog.start('save'); state = 'dialog'">Salvar/Carregar</span>
       </p>
     </div>
     <div v-if="state === 'inv'" id="page">
@@ -50,7 +52,7 @@
           </td>
         </tr>
       </table>
-      <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">{{m}} </span>
+      <span v-for="m in modes[state]" :class="['clickable', mode == m ? m : '']" @click="mode = m">* {{m}} </span>
     </div>
     <div v-if="state == 'dialog'" id="page">
       <h2>Diálogo</h2>

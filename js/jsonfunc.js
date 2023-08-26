@@ -7,11 +7,7 @@ const checkCondition = (ctx, cond) => {
   if (cond.call) {
     const call = cond.call;
     const caller = handleVariable(ctx, call.caller);
-    console.log(caller);
-    console.log(call.args);
-    const r = caller[call.method](...call.args);
-    console.log(r);
-    return r;
+    return caller[call.method](...call.args);
   }
   return false;
 }

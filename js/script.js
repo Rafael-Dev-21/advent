@@ -1,41 +1,44 @@
-import { createApp, reactive } from 'https://unpkg.com/petite-vue?module';
+import { createApp, reactive } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js';
 import player from './player.js';
 import dialog from './dialog.js';
 import { doAction, checkCondition } from './jsonfunc.js';
 
-function Game({ initialRoom, roomsPath, objsPath }) {
-  return {
-    state: 'load',
-    states: ['game', 'inv', 'dialog'],
-    mode: 'olhar',
-    modes: {
-      game: ['olhar', 'pegar', 'falar'],
-      inv: ['olhar', 'largar']
-    },
-    player,
-    dialog,
-    room: null,
-    roomDesc: '',
-    roomImg: '',
-    rooms: null,
-    initialRoom: initialRoom,
-    objects: null,
-    message: null,
-    mounted() {
-      Promise.all([fetch(roomsPath)
-        .then(res => res.json()), fetch(objsPath).then(res => res.json())])
-        .then(res => {
-          this.rooms = res[0];
-          this.objects = res[1];
-          this.dialog.load('save', './data/dialogs/save.json', false);
-          this.room = this.rooms[this.initialRoom];
-          this.roomDesc = this.room.description;
-          this.roomImg = this.room.image || '';
+createApp({
+  data() {
+    return {
+      state: 'load',
+      states: ['game', 'inv', 'dialog'],
+      mode: 'olhar',
+      modes: {
+        game: ['olhar', 'pegar', 'falar'],
+        inv: ['olhar', 'largar']
+      },
+      player,
+      dialog,
+      room: null,
+      roomDesc: '',
+      roomImg: '',
+      rooms: null,
+      initialRoom: 'campo',
+      objects: null,
+      message: null,
+    }
+  },
+  mounted() {
+    Promise.all([fetch('./data/rooms.json')
+        .then(res => res.json()), fetch('./data/objects.json').then(res => res.json())])
+      .then(res => {
+        this.rooms = res[0];
+        this.objects = res[1];
+        this.dialog.load('save', './data/dialogs/save.json', false);
+        this.room = this.rooms[this.initialRoom];
+        this.roomDesc = this.room.description;
+        this.roomImg = this.room.image || '';
 
-          this.state = 'game';
-        });
-
-    },
+        this.state = 'game';
+      });
+  },
+  methods: {
     doCommand(arg) {
       switch (this.mode) {
         case 'olhar':
@@ -137,7 +140,5 @@ function Game({ initialRoom, roomsPath, objsPath }) {
     checkCondition(c) {
       return checkCondition(this, c)
     },
-  };
-}
-
-createApp({ Game }).mount();
+  }
+}).mount('#app');

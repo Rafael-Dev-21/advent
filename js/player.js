@@ -1,4 +1,4 @@
-import { reactive } from 'https://unpkg.com/petite-vue?module';
+import { reactive } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js';
 
 export default reactive({
   inventory: Array(16).fill(null),
