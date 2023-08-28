@@ -1,0 +1,25 @@
+{
+    "silver_coin": {
+        "name": "moeda de prata",
+        "pronoun": "uma",
+        "plural": "moedas de prata",
+        "desc": "A moeda tem uma águia estampada.",
+        "icon": "assets/images/moeda-prata.png",
+        "canPick": true
+    },
+    "guard": {
+        "name": "guarda",
+        "pronoun": "um",
+        "plural": "guardas",
+        "desc": "O guarda tem olheiras e um semblante cansado.",
+        "dialogUrl": "guarda"
+    },
+    "wood": {
+        "name": "madeira",
+        "pronoun": "uma",
+        "plural": "madeiras",
+        "desc": "Madeira seca e torta, melhor do que nada.",
+        "icon": "assets/images/madeira.png",
+        "canPick": true
+    }
+}

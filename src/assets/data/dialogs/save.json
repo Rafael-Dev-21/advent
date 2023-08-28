@@ -1,0 +1,25 @@
+{
+    "start": {
+        "text": "Salvar ou Carregar?",
+        "options": [
+            {
+                "text": "Salvar",
+                "next": null,
+                "action": {
+                    "caller": "this",
+                    "method": "doSave",
+                    "args": ["advent.sav"]
+                }
+            },
+            {
+                "text": "Carregar",
+                "next": null,
+                "action": {
+                    "caller": "this",
+                    "method": "doLoad",
+                    "args": ["advent.sav"]
+                }
+            }
+        ]
+    }
+}
