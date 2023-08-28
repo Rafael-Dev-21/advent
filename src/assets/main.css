@@ -3,40 +3,40 @@
 @import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");
 
 body {
-    font:
-        1.3rem Inconsolata,
-        monospace;
-    background-color: black;
-    background-image: radial-gradient(rgba(0, 150, 0, 0.75), black 120%);
-    pointer-events: none;
-    padding: 1.7rem;
+  font:
+    1.3rem Inconsolata,
+    monospace;
+  background-color: black;
+  background-image: radial-gradient(rgba(0, 150, 0, 0.75), black 120%);
+  pointer-events: none;
+  padding: 1.7rem;
 }
 
 body::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(black, 0.15),
-        rgba(black, 0.15) 1rem,
-        transparent 1rem,
-        transparent 2rem
-    );
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(black, 0.15),
+    rgba(black, 0.15) 1rem,
+    transparent 1rem,
+    transparent 2rem
+  );
 }
 
 #app {
-    width: 80vw;
-    height: 80vh;
-    margin: 0 auto;
-    text-align: center;
+  width: 80vw;
+  height: 80vh;
+  margin: 0 auto;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
-    body {
-        background-image: radial-gradient(hsl(0, 50%, 50%), black 120%);
-    }
+  body {
+    background-image: radial-gradient(hsl(0, 50%, 50%), black 120%);
+  }
 }

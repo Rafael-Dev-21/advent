@@ -1,55 +1,55 @@
 interface TypeObject {
-    name: string;
-    pronoun: string;
-    plural: string;
-    desc: string;
-    canPick?: boolean;
-    icon?: string;
-    dialogUrl?: string;
+  name: string;
+  pronoun: string;
+  plural: string;
+  desc: string;
+  canPick?: boolean;
+  icon?: string;
+  dialogUrl?: string;
 }
 
 interface GameObject {
-    id: string;
-    quantity?: number;
+  id: string;
+  quantity?: number;
 }
 
 interface Exit {
-    dir: string;
-    room: string;
+  dir: string;
+  room: string;
 }
 
 interface Action {
-    caller: string;
-    method: string;
-    args: any[];
+  caller: string;
+  method: string;
+  args: any[];
 }
 
 interface Condition {
-    call?: Action;
+  call?: Action;
 }
 
 interface Room {
-    description: string;
-    image: string;
-    exits?: Exit[];
-    objects?: GameObject[];
-    action?: Action;
+  description: string;
+  image: string;
+  exits?: Exit[];
+  objects?: GameObject[];
+  action?: Action;
 }
 
 interface World {
-    rooms: {
-        [key: string]: Room;
-    };
-    objects: {
-        [key: string]: TypeObject;
-    };
+  rooms: {
+    [key: string]: Room;
+  };
+  objects: {
+    [key: string]: TypeObject;
+  };
 }
 
 interface Player {
-    inventory: (GameObject | null)[];
-    maxHealth: number;
-    health: number;
-    room: string;
+  inventory: (GameObject | null)[];
+  maxHealth: number;
+  health: number;
+  room: string;
 }
 
 interface DialogOption {

@@ -7,16 +7,16 @@ export const useDialog = defineStore("dialog", {
     all: {},
     current: null,
     state: null,
-    data: null,
+    data: null
   }),
   getters: {
-    options: (state) => state.state?.options ?? [],
+    options: (state) => state.state?.options ?? []
   },
   actions: {
     load(key: string, path: string, shouldStart: boolean) {
       import(`../assets/data/dialogs/${path}.json`)
-        .then(mod => mod.default)
-        .then(mod => mod as DialogTree)
+        .then((mod) => mod.default)
+        .then((mod) => mod as DialogTree)
         .then((res) => {
           this.all[key] = res;
           if (shouldStart) this.start(key);
@@ -49,6 +49,6 @@ export const useDialog = defineStore("dialog", {
     },
     hasDialog(key: string) {
       return !!this.all[key];
-    },
-  },
+    }
+  }
 });

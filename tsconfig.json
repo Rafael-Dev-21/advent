@@ -17,7 +17,7 @@
             "*": ["@/types/*.d.ts"]
         },
         "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-        "types": ["vite/client"],
+        "types": ["vite/client", "node"],
         "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

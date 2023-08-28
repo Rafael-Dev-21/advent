@@ -9,10 +9,7 @@ const game = useGame();
   <p v-if="game.dialog.state">{{ game.dialog.state.text }}</p>
   <template v-if="game.dialog.options">
     <h3>Opções</h3>
-    <p
-      v-for="option: DialogOption in game.filteredOptions()"
-      :key="option.text"
-    >
+    <p v-for="option: DialogOption in game.filteredOptions()" :key="option.text">
       <PlainButton class="option" @click="game.doChoose(option)">{{ option.text }}</PlainButton>
     </p>
   </template>

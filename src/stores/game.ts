@@ -10,19 +10,16 @@ export const useGame = defineStore("game", {
     player: usePlayer(),
     world: useWorld(),
     dialog: useDialog(),
-    state: "game",
+    state: "game"
   }),
   getters: {
     room: (state) => state.world.room(state.player.room),
-    roomDesc(state) {
-      return state.world.room(state.player.room).description;
+    roomDesc(): string {
+      return this.room.description;
     },
-    roomImg(state) {
-      return new URL(
-        "../" + state.world.room(state.player.room).image,
-        import.meta.url
-      ).href;
-    },
+    roomImg() {
+      return this.room.image;
+    }
   },
   actions: {
     objectName(obj: GameObject) {
@@ -34,13 +31,13 @@ export const useGame = defineStore("game", {
       }
       return fallback;
     },
-    itemIcon(obj: GameObject | null, fallback = "assets/images/vazio.png") {
+    itemIcon(obj: GameObject | null, fallback = "images/vazio.png") {
       let url = fallback;
       if (obj) {
         url = this.world.objects[obj!.id].icon!;
       }
 
-      return new URL("../" + url, import.meta.url).href;
+      return url;
     },
     doMove(newRoom: string) {
       this.player.room = newRoom;
@@ -122,9 +119,7 @@ export const useGame = defineStore("game", {
       return checkCondition(this, cond);
     },
     filteredOptions() {
-      return this.dialog.options.filter(
-        (t) => !t.condition || this.checkCondition(t.condition)
-      );
-    },
-  },
+      return this.dialog.options.filter((t) => !t.condition || this.checkCondition(t.condition));
+    }
+  }
 });

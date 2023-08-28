@@ -11,7 +11,10 @@ const state = ref("select");
 const fn = ref(null);
 
 function save() {
-  localStorage.setItem(savefile.value, JSON.stringify({player: game.player.$state, world: game.world.$state}));
+  localStorage.setItem(
+    savefile.value,
+    JSON.stringify({ player: game.player.$state, world: game.world.$state })
+  );
 }
 
 function load() {
@@ -31,19 +34,13 @@ function delet() {
       <fieldset>
         <legend>Selecione save</legend>
         <div>
-          <input type="radio" v-model="savefile" value="advent1_sav" /><label
-            >Save 1</label
-          >
+          <input type="radio" v-model="savefile" value="advent1_sav" /><label>Save 1</label>
         </div>
         <div>
-          <input type="radio" v-model="savefile" value="advent2_sav" /><label
-            >Save 2</label
-          >
+          <input type="radio" v-model="savefile" value="advent2_sav" /><label>Save 2</label>
         </div>
         <div>
-          <input type="radio" v-model="savefile" value="advent3_sav" /><label
-            >Save 3</label
-          >
+          <input type="radio" v-model="savefile" value="advent3_sav" /><label>Save 3</label>
         </div>
       </fieldset>
       <div>
@@ -60,8 +57,15 @@ function delet() {
             state = 'confirm';
           "
         >
-          Carregar
-        </button><button @click.prevent="fn = delet; state = 'confirm'">Deletar</button>
+          Carregar</button
+        ><button
+          @click.prevent="
+            fn = delet;
+            state = 'confirm';
+          "
+        >
+          Deletar
+        </button>
       </div>
     </template>
     <template class="input" v-else-if="state == 'confirm'">
