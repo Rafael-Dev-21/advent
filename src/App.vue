@@ -26,7 +26,7 @@ let testHowl = new Howl({
   </header>
   <main id="page">
     <div>
-      <p class="health">{{ game.player.health }}/{{ game.player.maxHealth }}</p>
+      <p class="health">Saúde: {{ game.player.health }}/{{ game.player.maxHealth }}</p>
     </div>
     <button
       v-for="state: string in states"
@@ -45,19 +45,18 @@ let testHowl = new Howl({
 
 <style scoped>
 #title {
-  color: hsl(300, 50%, 50%);
-  margin: 1rem auto;
+  color: darkblue;
+  margin: 0 auto;
 }
 
 #page {
-  color: hsl(180, 50%, 50%);
+  color: black;
   border: 1px solid white;
-  margin: 5px auto;
+  margin: 0 auto;
   padding: 5px;
   overflow: hidden;
-  width: calc(90vw - 2rem);
-  min-height: 480px;
-  max-height: 4096px;
+  width: calc(100% - 3.5rem);
+  height: calc(100% - 3.5rem);
 }
 
 .clickable {
@@ -76,12 +75,7 @@ button.clickable.unselected {
 
 .health {
   color: darkred;
-  background: radial-gradient(white 1px, black 120%);
   display: inline-block;
   margin-inline: auto;
-}
-
-.health:before {
-  content: "♥";
 }
 </style>
