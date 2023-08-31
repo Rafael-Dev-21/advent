@@ -31,20 +31,23 @@ const game = useGame();
 }
 
 .inventory {
-  width: 90%;
+  width: min(90%, 30vh);
   height: auto;
   margin-inline: auto;
 }
 
 .inventory td {
   position: relative;
-  width: 3rem;
-  height: 3rem;
+  width: 25%;
+}
+
+.inventory tr {
+  height: 25%;
 }
 
 .inventory img {
-  width: 3rem;
-  height: 3rem;
+  width: 98%;
+  height: 98%;
   z-index: 2;
   image-rendering: pixelated;
 }
