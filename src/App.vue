@@ -3,13 +3,21 @@ import GamePage from "./components/GamePage.vue";
 import InventoryPage from "./components/InventoryPage.vue";
 import DialogPage from "./components/DialogPage.vue";
 import SaveLoadPage from "./components/SaveLoadPage.vue";
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 
 import { useGame } from "./stores/game";
+import { Howl } from "howler";
 
 const game = useGame();
 
-let states = ref(["game", "inv", "save/load"]);
+ const states = ref(["game", "inv", "save/load"]);
+
+let testHowl = new Howl({
+  src: ["musics/theme.mp3"],
+  format: ["mp3"],
+  loop: true,
+  autoplay: true,
+});
 </script>
 
 <template>

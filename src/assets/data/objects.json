@@ -21,5 +21,13 @@
     "desc": "Madeira seca e torta, melhor do que nada.",
     "icon": "images/madeira.png",
     "canPick": true
+  },
+  "stone": {
+    "name": "pedra",
+    "pronoun": "uma",
+    "plural": "pedras",
+    "desc": "Um pedaço de pedra. Pode ser util.",
+    "icon": "images/pedra.png",
+    "canPick": true
   }
 }
