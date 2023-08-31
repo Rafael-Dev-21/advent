@@ -54,7 +54,7 @@ let testHowl = new Howl({
   border: 1px solid black;
   margin: 0 auto;
   padding: 5px;
-  overflow: hidden;
+  overflow: scroll;
   width: calc(100% - 3.5rem);
   height: calc(100% - 3.5rem);
 }
