@@ -1,1 +1,0 @@
-const a={text:"Salvar ou Carregar?",options:[{text:"Salvar",next:null,action:{caller:"this",method:"doSave",args:["advent.sav"]}},{text:"Carregar",next:null,action:{caller:"this",method:"doLoad",args:["advent.sav"]}}]},t={start:a};export{t as default,a as start};
