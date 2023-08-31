@@ -16,6 +16,6 @@ const game = useGame();
 </template>
 <style scoped>
 .clickable.option {
-  color: orange;
+  color: darkorange;
 }
 </style>
