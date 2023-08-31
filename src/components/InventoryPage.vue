@@ -49,11 +49,11 @@ const game = useGame();
 }
 
 .inventory .count {
-  color: green;
+  color: darkgreen;
   position: absolute;
   font-size: 1.5rem;
   font-style: bold;
-  text-shadow: 2px 2px 1px black;
+  text-shadow: 0px 0px 1px black;
   left: 2px;
   bottom: 2px;
   z-index: 1;

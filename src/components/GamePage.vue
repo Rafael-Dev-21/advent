@@ -30,9 +30,9 @@
           aqui.
         </template>
       </p>
-    </div>
-    <div>
-      <PlainButton v-for="m: string in modes" :key="m" :class="[{ selected: m == mode }, m, 'mode']" @click.prevent="mode = m">{{ m }}</PlainButton>
+      <div>
+        <PlainButton v-for="m: string in modes" :key="m" :class="[{ selected: m == mode }, m, 'mode']" @click.prevent="mode = m">{{ m }}</PlainButton>
+      </div>
     </div>
     <div v-if="game.room.exits" class="directions">
       <PlainButton v-for="exit: Exit in game.room.exits" :class="['exit', exit.dir]" :key="exit.dir" @click.prevent="message = game.doMove(exit.room)">{{ exit.dir }}</PlainButton>
@@ -53,21 +53,22 @@
     transition-duration: 100ms;
     transition-timing-function: ease-in-out;
   }
-  
+
   .content {
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   @media (min-width: 600px) {
     #roomImage {
       width: 30%;
     }
-    
+
     .content {
       flex-direction: row;
     }
-    
+
     .info {
       width: 30%;
     }
@@ -78,15 +79,15 @@
   }
 
   .exit {
-    color: hsl(300, 60%, 60%);
-    font-size: 2rem;
+    color: darkmagenta;
+    font-size: 1.6rem;
   }
 
   .directions {
     display: inline-block;
     position: relative;
-    width: 12rem;
-    height: 6rem;
+    width: 10.6rem;
+    height: 4.8rem;
     margin-inline: auto;
   }
 
@@ -119,7 +120,7 @@
   }
 
   .olhar {
-    color: green;
+    color: darkgreen;
   }
 
   .pegar {
@@ -127,6 +128,6 @@
   }
 
   .falar {
-    color: blue;
+    color: darkblue;
   }
 </style>

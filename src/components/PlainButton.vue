@@ -12,5 +12,6 @@
   border: none;
   color: inherit;
   font: inherit;
+  text-decoration: underline black;
 }
 </style>
