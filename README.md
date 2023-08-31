@@ -1,35 +1,13 @@
-# advent
+# Adventure
 
-This template should help get you started developing with Vue 3 in Vite.
+-- Português
 
-## Recommended IDE Setup
+Um pequeno jogo de aventura baseado em texto (trabalho em progresso).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+-- English
 
-## Customize configuration
+A litte text based adventure game (work in progress).
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+-- links
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+<https://rafael-dev-21.github.io/advent>
