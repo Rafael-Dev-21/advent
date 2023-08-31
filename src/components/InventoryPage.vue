@@ -33,6 +33,7 @@ const game = useGame();
 .inventory {
   width: 90%;
   height: auto;
+  margin-inline: auto;
 }
 
 .inventory td {

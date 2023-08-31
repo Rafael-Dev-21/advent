@@ -45,7 +45,7 @@
   }
 
   #roomImage {
-    width: 50%;
+    width: 90%;
     height: auto;
     image-rendering: pixelated;
     transition-property: all;
