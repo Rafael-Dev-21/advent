@@ -62,7 +62,7 @@
     #roomImage {
       flex-grow: 1;
     }
-    
+
     .content {
       flex-direction: row;
     }
@@ -70,9 +70,9 @@
     .info {
       flex-grow: 1;
     }
-    
+
     .directions {
-      flex-grow: 1;
+      flex-grow: 1.5;
     }
   }
 
