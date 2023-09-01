@@ -15,8 +15,8 @@
           <PlainButton class="option" @click="game.doChoose(option)">{{ option.text }}</PlainButton>
         </li>
       </ol>
-  </article>
 </template>
+</article>
 </template>
 <style scoped>
   .clickable.option {
