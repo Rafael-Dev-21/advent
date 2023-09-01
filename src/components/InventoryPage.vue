@@ -27,8 +27,8 @@
   }
 
   .inventory {
-    width: min(90vw, 70vh);
-    height: auto;
+    width: min(90vw, 60vh);
+    height: min(90vw, 60vh);
     margin-inline: auto;
   }
 
