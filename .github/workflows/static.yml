@@ -37,6 +37,14 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Butler
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: advent
+          ITCH_GAME: advent
+          ITCH_USER: rafael-dev-21
+          PACKAGE: dist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
