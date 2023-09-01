@@ -38,16 +38,13 @@ const game = useGame();
 
 .inventory td {
   position: relative;
-  width: 25%;
-}
-
-.inventory tr {
-  height: 25%;
+  width: 4rem;
+  height: 4rem;
 }
 
 .inventory img {
-  width: 98%;
-  height: 98%;
+  width: 4rem;
+  height: 4rem;
   z-index: 2;
   image-rendering: pixelated;
 }
@@ -55,7 +52,6 @@ const game = useGame();
 .inventory .count {
   color: darkgreen;
   position: absolute;
-  font-size: 1.5rem;
   font-style: bold;
   text-shadow: 0px 0px 1px black;
   left: 2px;

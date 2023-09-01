@@ -13,31 +13,33 @@
   const modes = ref(["olhar", "pegar", "falar"]);
 </script>
 <template>
-  <h2 id="roomName">{{ game.player.room }}</h2>
-  <div class="content">
-    <img id="roomImage" width="160" height="144" :alt="game.roomDesc" :src="game.roomImg" />
-    <div class="info">
-      <p id="roomDesc">
-        {{ game.roomDesc }}
-      </p>
-      <p v-if="message">{{ message }}</p>
-      <p v-if="game.room.objects">
-        <template v-for="obj: GameObject in game.room.objects" :key="obj.id">
-          Tem
-          <PlainButton :class="mode" @click.prevent="message = game.action(mode, obj.id)">{{
+  <article aria-labelledby="roomName">
+    <h2 id="roomName">{{ game.player.room }}</h2>
+    <div class="content">
+      <img id="roomImage" width="160" height="144" :alt="game.roomDesc" :src="game.roomImg" />
+      <div class="info">
+        <p id="roomDesc">
+          {{ game.roomDesc }}
+        </p>
+        <p v-if="message">{{ message }}</p>
+        <p v-if="game.room.objects">
+          <template v-for="obj: GameObject in game.room.objects" :key="obj.id">
+            Tem
+            <PlainButton :class="mode" @click.prevent="message = game.action(mode, obj.id)">{{
         game.objectName(obj)
       }}</PlainButton>
-          aqui.
-        </template>
-      </p>
-      <div>
-        <PlainButton v-for="m: string in modes" :key="m" :class="[{ selected: m == mode }, m, 'mode']" @click.prevent="mode = m">{{ m }}</PlainButton>
+            aqui.
+          </template>
+        </p>
+        <div>
+          <PlainButton v-for="m: string in modes" :key="m" :class="[{ selected: m == mode }, m, 'mode']" @click.prevent="mode = m">{{ m }}</PlainButton>
+        </div>
+      </div>
+      <div v-if="game.room.exits" class="directions">
+        <PlainButton v-for="exit: Exit in game.room.exits" :class="['exit', exit.dir]" :key="exit.dir" @click.prevent="message = game.doMove(exit.room)">{{ exit.dir }}</PlainButton>
       </div>
     </div>
-    <div v-if="game.room.exits" class="directions">
-      <PlainButton v-for="exit: Exit in game.room.exits" :class="['exit', exit.dir]" :key="exit.dir" @click.prevent="message = game.doMove(exit.room)">{{ exit.dir }}</PlainButton>
-    </div>
-  </div>
+  </article>
 </template>
 <style scoped>
   #roomName {
@@ -45,13 +47,9 @@
   }
 
   #roomImage {
-    width: 90%;
+    width: 100%;
     height: auto;
     image-rendering: pixelated;
-    transition-property: all;
-    transition-delay: 16ms;
-    transition-duration: 100ms;
-    transition-timing-function: ease-in-out;
   }
 
   .content {
@@ -62,15 +60,19 @@
 
   @media (min-width: 600px) {
     #roomImage {
-      width: 30%;
+      flex-grow: 1;
     }
-
+    
     .content {
       flex-direction: row;
     }
 
     .info {
-      width: 30%;
+      flex-grow: 1;
+    }
+    
+    .directions {
+      flex-grow: 1;
     }
   }
 

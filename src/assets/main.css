@@ -1,17 +1,9 @@
 @import "./base.css";
 
-@import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");
-
-body {
-  font:
-    1.3rem Inconsolata,
-    monospace;
-  padding: 1.7rem;
-}
-
 #app {
   width: 90vw;
   height: 90vh;
   margin: 0 auto;
   text-align: center;
+  font-size: 1.3rem;
 }
