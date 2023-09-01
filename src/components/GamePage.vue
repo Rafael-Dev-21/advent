@@ -60,7 +60,7 @@
 
   @media (min-width: 600px) {
     #roomImage {
-      flex-grow: 0.3;
+      flex-grow: 1;
     }
 
     .content {
@@ -68,11 +68,11 @@
     }
 
     .info {
-      flex-grow: 0.35;
+      flex-grow: 2;
     }
 
     .directions {
-      flex-grow: 0.35;
+      flex-grow: 3;
     }
   }
 
