@@ -47,7 +47,7 @@
   }
 
   #roomImage {
-    width: 100%;
+    width: auto;
     height: auto;
     image-rendering: pixelated;
   }
