@@ -72,6 +72,14 @@
   "lago": {
     "description": "Você está em um lago secreto no meio da floresta. Você se sente revigorado.",
     "image": "images/lago.png",
+    "music": {
+      "src": ["musics/lago.mp3"],
+      "format": ["mp3"],
+      "sprite": {
+        "a": [0, 6857],
+        "b": [6857, 20571, true]
+      }
+    },
     "action": {
       "caller": "player",
       "method": "fullHeal",

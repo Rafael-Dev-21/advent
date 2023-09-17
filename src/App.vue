@@ -6,18 +6,10 @@
   import { ref, Ref } from "vue";
 
   import { useGame } from "./stores/game";
-  import { Howl } from "howler";
 
   const game = useGame();
 
   const states = ref(["game", "inv", "save/load"]);
-
-  let testHowl = new Howl({
-    src: ["musics/theme.mp3"],
-    format: ["mp3"],
-    loop: true,
-    autoplay: true,
-  });
 </script>
 
 <template>

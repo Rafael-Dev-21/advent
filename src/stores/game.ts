@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { usePlayer } from "./player";
 import { useWorld } from "./world";
 import { useDialog } from "./dialog";
+import { Howl } from "howler";
 
 import { doAction, checkCondition } from "@/utils/jsonfunc";
 
@@ -10,6 +11,7 @@ export const useGame = defineStore("game", {
     player: usePlayer(),
     world: useWorld(),
     dialog: useDialog(),
+    howl: null,
     state: "game"
   }),
   getters: {
@@ -43,6 +45,15 @@ export const useGame = defineStore("game", {
       this.player.room = newRoom;
       if (this.room.action) {
         doAction(this, this.room.action);
+      }
+      
+      if (this.howl) this.howl.stop();
+      
+      if (this.room.music != null) {
+        this.howl = new Howl(this.room.music);
+        this.howl.play("a");
+        
+        this.howl.once("end", () => this.howl.play("b"));
       }
     },
     doLook(id: string) {

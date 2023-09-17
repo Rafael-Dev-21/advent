@@ -31,6 +31,7 @@ interface Condition {
 interface Room {
   description: string;
   image: string;
+  music?: HowlOptions;
   exits?: Exit[];
   objects?: GameObject[];
   action?: Action;
